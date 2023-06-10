@@ -12,6 +12,7 @@ const authorize = localStorage.getItem("user");
 const headers = {
   Authorization: authorize
 };
+export const register = (params) => api.post("/user", params);
 export const login = (credentials) => api.post("/login", credentials);
 export const changePassword = (passwordData) =>
   api.put("/change-password", passwordData);

@@ -4,6 +4,7 @@ import { BookCart, BookList } from "../pages";
 import BookDetail from "../pages/BookDetail";
 import { Navigator } from "../layout";
 import Login from "../pages/Login";
+import Register from "../pages/Register";
 
 const Router = () => (
   <BrowserRouter>
@@ -12,6 +13,7 @@ const Router = () => (
       <Route exact path="/" element={<BookList />} />
       <Route exact path="/books/:id" element={<BookDetail />} />
       <Route exact path="/login" element={<Login />} />
+      <Route exact path="/register" element={<Register />} />
       <Route exact path="/cart" element={<BookCart />} />
     </Routes>
   </BrowserRouter>
