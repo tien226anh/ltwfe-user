@@ -5,12 +5,12 @@ const API_BASE_URL = "http://localhost:8000";
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 1000 * 30,
-  withCredentials: true
+  withCredentials: true,
 });
 
 const authorize = localStorage.getItem("user");
 const headers = {
-  Authorization: authorize
+  Authorization: authorize,
 };
 export const register = (params) => api.post("/user", params);
 export const login = (credentials) => api.post("/login", credentials);

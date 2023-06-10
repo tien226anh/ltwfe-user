@@ -10,7 +10,12 @@ import {
   TextField,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { addToCart, getBookDetail, getBookRate, rateBook } from "../services/api";
+import {
+  addToCart,
+  getBookDetail,
+  getBookRate,
+  rateBook,
+} from "../services/api";
 
 const useStyles = makeStyles((theme) => ({
   root: {

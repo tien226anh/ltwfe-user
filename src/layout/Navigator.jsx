@@ -27,8 +27,8 @@ const Navigator = () => {
   };
 
   const handleCart = async () => {
-    navigateTo('/cart');
-  }
+    navigateTo("/cart");
+  };
 
   const isUserLoggedIn = user && user.avatar_url;
 
@@ -45,10 +45,7 @@ const Navigator = () => {
           </NavLink>
         </div>
         <div className="nav-right">
-          <button
-            onClick={handleCart}
-            className="cart-btn"
-          >
+          <button onClick={handleCart} className="cart-btn">
             <Cart />
           </button>
           <button className="avatar-btn">

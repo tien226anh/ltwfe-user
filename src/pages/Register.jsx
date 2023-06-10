@@ -10,14 +10,14 @@ const Register = () => {
     email: "",
     password: "",
     role: "user", // Set role to "user" by default
-    full_name: "" // Initialize full_name as an empty string
+    full_name: "", // Initialize full_name as an empty string
   });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -39,7 +39,7 @@ const Register = () => {
           marginTop: 8,
           display: "flex",
           flexDirection: "column",
-          alignItems: "center"
+          alignItems: "center",
         }}
       >
         <Typography component="h1" variant="h5">

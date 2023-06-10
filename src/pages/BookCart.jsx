@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { deleteFromCart, getCart } from '../services/api';
-import { IconButton } from '@mui/material';
-import { Delete } from '../icons';
-import { useNavigate } from 'react-router-dom';
+import { deleteFromCart, getCart } from "../services/api";
+import { IconButton } from "@mui/material";
+import { Delete } from "../icons";
+import { useNavigate } from "react-router-dom";
 
 const BookCart = () => {
   const navigateTo = useNavigate();
@@ -51,7 +51,9 @@ const BookCart = () => {
           >
             <Delete />
           </IconButton>
-          <button onClick={() => handleClick(book.book_id)}>View Details</button>
+          <button onClick={() => handleClick(book.book_id)}>
+            View Details
+          </button>
         </CartWrapper>
       ))}
     </>
