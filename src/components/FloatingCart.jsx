@@ -1,24 +1,41 @@
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import SingleCartItem from "./SingleCartItem";
 import Button from "../components/Button";
 import { useGlobalContext } from "../context/context";
+import { getCart } from "../services/api";
+
 const FloatingCart = ({ className }) => {
-  const { state } = useGlobalContext();
+  const { state, dispatch } = useGlobalContext();
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const response = await getCart();
+        dispatch({ type: "SET_CART", payload: response.data });
+      } catch (error) {
+        console.error("Error fetching cart:", error);
+      }
+    };
+
+    fetchCart();
+  }, [dispatch]);
+
   return (
     <FloatingCartWrapper className={className}>
       <header>
-        <p>Cart</p>
+        <p>{state.cart.title}</p>
       </header>
       <div className="divider"></div>
       <ul className="cart-items">
-        {state.cart.length > 0 ? (
-          state.cart.map((cartItem) => {
-            return <SingleCartItem key={cartItem.productId} {...cartItem} />;
-          })
+        {state.cart.books.length > 0 ? (
+          state.cart.books.map((cartItem) => (
+            <SingleCartItem key={cartItem.book_id} {...cartItem} />
+          ))
         ) : (
           <p className="empty">Your cart is empty.</p>
         )}
-        {state.cart.length > 0 && <Button>Checkout</Button>}
+        {state.cart.books.length > 0 && <Button>Checkout</Button>}
       </ul>
     </FloatingCartWrapper>
   );

@@ -10,7 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { addToCart, getBookDetail, getBookRate } from "../services/api";
+import { addToCart, getBookDetail, getBookRate, rateBook } from "../services/api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,15 +54,23 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center", // Center align the button and TextField
     marginBottom: theme.spacing(2),
   },
+  commentForm: {
+    display: "flex",
+    flexDirection: "column",
+    marginTop: theme.spacing(2),
+  },
 }));
 
-const BookDetail = ({ _id }) => {
+const BookDetail = () => {
   const [book, setBook] = useState(null);
   const [averageRate, setAverageRate] = useState(0);
   const [commentRate, setCommentRate] = useState([]);
+  const [quantity, setQuantity] = useState(1);
+  const [commentValue, setCommentValue] = useState("");
+  const [selectedRate, setSelectedRate] = useState(0);
+
   const { id } = useParams();
   const classes = useStyles();
-  const [quantity, setQuantity] = useState(1);
 
   const handleQuantityChange = (event) => {
     setQuantity(parseInt(event.target.value));
@@ -81,13 +89,39 @@ const BookDetail = ({ _id }) => {
       });
   };
 
+  const handleCommentChange = (event) => {
+    setCommentValue(event.target.value);
+  };
+
+  const handleCommentRateChange = (event, value) => {
+    setSelectedRate(value);
+  };
+
+  const handleCommentSubmit = () => {
+    const params = {
+      comment: commentValue,
+      rate: selectedRate,
+    };
+
+    rateBook(id, params)
+      .then((response) => {
+        console.log(response.data);
+        setCommentValue("");
+        setSelectedRate(0);
+        fetchBookRate();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   useEffect(() => {
     const fetchBookDetail = async () => {
       try {
         const response = await getBookDetail(id);
         setBook(response.data);
       } catch (error) {
-        // Handle error when fetching book details
+        console.error(error);
       }
     };
 
@@ -101,7 +135,7 @@ const BookDetail = ({ _id }) => {
         setAverageRate(response.data.average_rate);
         setCommentRate(response.data.comment_rate);
       } catch (error) {
-        // Handle error when fetching book rating
+        console.error(error);
       }
     };
 
@@ -163,6 +197,27 @@ const BookDetail = ({ _id }) => {
             <Typography variant="h5" component="h3">
               Comments
             </Typography>
+            <Box className={classes.commentForm}>
+              <Rating
+                name="comment-rate"
+                value={selectedRate}
+                onChange={handleCommentRateChange}
+                precision={0.5}
+                style={{ margin: "0 auto" }}
+              />
+              <TextField
+                label="Your Comment"
+                variant="outlined"
+                value={commentValue}
+                onChange={handleCommentChange}
+                multiline
+                rows={4}
+                margin="normal"
+              />
+              <Button variant="contained" onClick={handleCommentSubmit}>
+                Submit Comment
+              </Button>
+            </Box>
             {commentRate.map((comment, index) => (
               <Box key={index} className={classes.commentItem}>
                 <Avatar className={classes.commentAvatar}>

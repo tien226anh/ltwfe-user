@@ -3,7 +3,7 @@ import styled from "styled-components";
 import FloatingCart from "../components/FloatingCart";
 import { Cart, Menu } from "../icons";
 import { useGlobalContext } from "../context/context";
-import { Badge, Button } from "@mui/material";
+import { Button } from "@mui/material";
 
 const Navigator = () => {
   const { showSidebar, showCart, hideCart, state } = useGlobalContext();
@@ -27,6 +27,10 @@ const Navigator = () => {
     navigateTo("/login");
   };
 
+  const handleCart = async () => {
+    navigateTo('/cart');
+  }
+
   const isUserLoggedIn = user && user.avatar_url;
 
   return (
@@ -42,23 +46,10 @@ const Navigator = () => {
         </div>
         <div className="nav-right">
           <button
-            onClick={() => {
-              if (state.showingCart) {
-                hideCart();
-              } else {
-                showCart();
-              }
-            }}
+            onClick={handleCart}
             className="cart-btn"
           >
             <Cart />
-            {state.totalCartSize > 0 && (
-              <Badge
-                badgeContent={state.totalCartSize}
-                color="primary"
-                overlap="circular"
-              ></Badge>
-            )}
           </button>
           <button className="avatar-btn">
             {user && (
@@ -69,7 +60,6 @@ const Navigator = () => {
               />
             )}
           </button>
-          {state.showingCart && <FloatingCart className="active" />}
           <div className="floating-box">
             <Button
               variant="contained"
