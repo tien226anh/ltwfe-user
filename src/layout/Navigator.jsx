@@ -1,12 +1,11 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import FloatingCart from "../components/FloatingCart";
 import { Cart, Menu } from "../icons";
 import { useGlobalContext } from "../context/context";
 import { Button } from "@mui/material";
 
 const Navigator = () => {
-  const { showSidebar, showCart, hideCart, state } = useGlobalContext();
+  const { showSidebar } = useGlobalContext();
   const navigateTo = useNavigate();
 
   const navLinkStyles = ({ isActive }) => {
