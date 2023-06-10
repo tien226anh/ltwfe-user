@@ -39,6 +39,7 @@ const Navigator = () => {
           <Button onClick={showSidebar} className="menu-btn">
             <Menu />
           </Button>
+
           <NavLink style={navLinkStyles} to="/">
             Home
           </NavLink>

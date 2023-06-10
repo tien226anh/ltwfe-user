@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Close } from "../icons/index";
 import { useGlobalContext } from "../context/context";
-const sideBarLinks = ["Collections", "Men", "Women", "About", "Contact"];
+const sideBarLinks = ["Home"];
 
 const Sidebar = ({ isShowing }) => {
   const { hideSidebar } = useGlobalContext();
@@ -16,7 +16,7 @@ const Sidebar = ({ isShowing }) => {
           {sideBarLinks.map((link, idx) => {
             return (
               <li key={idx}>
-                <a onClick={hideSidebar} href="#">
+                <a onClick={hideSidebar} href="/">
                   {link}
                 </a>
               </li>
