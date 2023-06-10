@@ -2,10 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { getBooks } from '../services/api';
 import { Grid, Card, CardContent, CardMedia, Typography, CssBaseline, Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
     padding: theme.spacing(2),
+  },
+  hoveredCard: {
+    transform: 'scale(1.05)',
+    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.2)',
   },
   card: {
     height: '100%',
@@ -36,6 +41,7 @@ const BookList = () => {
   const [totalRecord, setTotalRecord] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(16);
+  const [hoveredCard, setHoveredCard] = useState(null);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -70,35 +76,38 @@ const BookList = () => {
   return (
     <>
       <CssBaseline />
-      <Grid
-        container
-        spacing={2}
-        className={classes.gridContainer}
-      >
-        {books.map((book) => (
-          <Grid item xs={12} sm={6} md={3} key={book._id}>
-            <Card
-              className={classes.card}
-            >
-              <CardMedia
-                className={classes.cardMedia}
-                image={`http://127.0.0.1:8000/${book.cover}`}
-                title={book.title}
-              />
-              <CardContent className={classes.cardContent}>
-                <Typography gutterBottom variant="h6" component="h2">
-                  {book.title}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  Author: {book.author}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  Price: {book.price}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+      <Grid container spacing={2} className={classes.gridContainer}>
+        {books.map((book) => {
+          // console.log(book._id);
+          return (
+            <Grid item xs={12} sm={6} md={3} key={book._id}>
+              <Link to={`/books/${book._id}`}>
+                <Card
+                  className={`${classes.card} ${hoveredCard === book._id ? classes.hoveredCard : ''}`}
+                  onMouseEnter={() => setHoveredCard(book._id)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                >
+                  <CardMedia
+                    className={classes.cardMedia}
+                    image={`http://127.0.0.1:8000/${book.cover}`}
+                    title={book.title}
+                  />
+                  <CardContent className={classes.cardContent}>
+                    <Typography gutterBottom variant="h6" component="h2">
+                      {book.title}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                      Author: {book.author}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                      Price: {book.price}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Link>
+            </Grid>
+          );
+        })}
       </Grid>
       <div className={classes.paginationContainer}>
         <Button disabled={currentPage === 1} onClick={handlePreviousPage}>
