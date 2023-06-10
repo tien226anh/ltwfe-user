@@ -1,4 +1,4 @@
-import { Navigator, Sidebar } from "./layout/index";
+import { Sidebar } from "./layout/index";
 import { useGlobalContext } from "./context/context";
 import Router from "./routes/routes";
 
@@ -7,7 +7,6 @@ function App() {
 
   return (
     <div style={{ margin: "0 auto" }}>
-      <Navigator />
       <Sidebar isShowing={state.showSidebar} />
       <div
         style={{
