@@ -1,48 +1,59 @@
-import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@mui/styles';
-import { Typography, Box, Paper, Rating, Avatar } from '@mui/material';
-import { useParams } from 'react-router-dom';
-import { getBookDetail, getBookRate } from '../services/api';
+import React, { useEffect, useState } from "react";
+import { makeStyles } from "@mui/styles";
+import {
+  Typography,
+  Box,
+  Paper,
+  Rating,
+  Avatar,
+  Button,
+  TextField,
+} from "@mui/material";
+import { useParams } from "react-router-dom";
+import { addToCart, getBookDetail, getBookRate } from "../services/api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(3),
-    maxWidth: '1200px',
-    margin: '0 auto'
+    maxWidth: "1200px",
+    margin: "0 auto",
   },
   bookDetails: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     marginBottom: theme.spacing(2),
   },
   bookImage: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   bookInfo: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
   },
   averageRate: {
     margin: theme.spacing(2),
-    // marginBottom: theme.spacing(2),
+    textAlign: "center", // Center align the average rate
   },
   commentList: {
     margin: theme.spacing(2),
-    // marginTop: theme.spacing(2),
   },
   commentItem: {
-    // marginBottom: theme.spacing(2),
     margin: theme.spacing(2),
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
   },
   commentAvatar: {
     marginRight: theme.spacing(2),
   },
   userNameRate: {
     display: "flex",
-    alignItems: 'center'
-  }
+    alignItems: "center",
+  },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "center", // Center align the button and TextField
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 const BookDetail = ({ _id }) => {
@@ -51,6 +62,24 @@ const BookDetail = ({ _id }) => {
   const [commentRate, setCommentRate] = useState([]);
   const { id } = useParams();
   const classes = useStyles();
+  const [quantity, setQuantity] = useState(1);
+
+  const handleQuantityChange = (event) => {
+    setQuantity(parseInt(event.target.value));
+  };
+
+  const handleAddToCart = () => {
+    const book_id = id;
+    const booksnum = quantity;
+    const obj = { book_id, booksnum };
+    addToCart(obj)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
     const fetchBookDetail = async () => {
@@ -58,7 +87,7 @@ const BookDetail = ({ _id }) => {
         const response = await getBookDetail(id);
         setBook(response.data);
       } catch (error) {
-        // Xử lý lỗi khi lấy chi tiết sách
+        // Handle error when fetching book details
       }
     };
 
@@ -72,7 +101,7 @@ const BookDetail = ({ _id }) => {
         setAverageRate(response.data.average_rate);
         setCommentRate(response.data.comment_rate);
       } catch (error) {
-        // Xử lý lỗi khi lấy rating của sách
+        // Handle error when fetching book rating
       }
     };
 
@@ -82,33 +111,74 @@ const BookDetail = ({ _id }) => {
   return (
     <Box className={classes.root}>
       {book && (
-        <Paper elevation={3} style={{ height: '80vh' }}>
+        <Paper elevation={3} style={{ height: "80vh" }}>
           <Box className={classes.bookDetails}>
             <Box className={classes.bookImage}>
-              <img src={`http://localhost:8000/${book.cover}`} alt={book.title} />
+              <img
+                src={`http://localhost:8000/${book.cover}`}
+                alt={book.title}
+              />
             </Box>
             <Box className={classes.bookInfo}>
-              <Typography variant="h4" component="h2">{book.title}</Typography>
+              <Typography variant="h4" component="h2">
+                {book.title}
+              </Typography>
               <Typography variant="subtitle1">Author: {book.author}</Typography>
               <Typography variant="body1">Describe: {book.describe}</Typography>
-              <Typography variant="body1">Release Date: {book.release_date}</Typography>
-              <Typography variant="body1">Page Number: {book.page_number}</Typography>
+              <Typography variant="body1">
+                Release Date: {book.release_date}
+              </Typography>
+              <Typography variant="body1">
+                Page Number: {book.page_number}
+              </Typography>
               <Typography variant="body1">Price: {book.price}</Typography>
             </Box>
           </Box>
+          <div className={classes.buttonContainer}>
+            <TextField
+              id="outlined-number"
+              label="Number"
+              type="number"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={handleQuantityChange}
+            />
+            <Button variant="contained" onClick={handleAddToCart}>
+              Thêm vào giỏ hàng
+            </Button>
+          </div>
           <Box className={classes.averageRate}>
-            <Typography variant="h5" component="h3">Average Rate</Typography>
-            <Rating name="average-rate" value={averageRate} readOnly precision={0.5} />
+            <Typography variant="h5" component="h3">
+              Average Rate
+            </Typography>
+            <Rating
+              name="average-rate"
+              value={averageRate}
+              readOnly
+              precision={0.5}
+            />
           </Box>
           <Box className={classes.commentList}>
-            <Typography variant="h5" component="h3">Comments</Typography>
+            <Typography variant="h5" component="h3">
+              Comments
+            </Typography>
             {commentRate.map((comment, index) => (
               <Box key={index} className={classes.commentItem}>
-                <Avatar className={classes.commentAvatar}>{comment.username.charAt(0)}</Avatar>
+                <Avatar className={classes.commentAvatar}>
+                  {comment.username.charAt(0)}
+                </Avatar>
                 <Box>
                   <div className={classes.userNameRate}>
-                    <Typography variant="subtitle1">{comment.username}</Typography>
-                    <Rating name={`rate-${index}`} value={comment.rate} readOnly precision={0.5} />
+                    <Typography variant="subtitle1">
+                      {comment.username}
+                    </Typography>
+                    <Rating
+                      name={`rate-${index}`}
+                      value={comment.rate}
+                      readOnly
+                      precision={0.5}
+                    />
                   </div>
                   <Typography variant="body1">{comment.comment}</Typography>
                 </Box>

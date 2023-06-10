@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { login } from '../services/api';
-import { Button, Grid, TextField, Typography } from '@mui/material';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { login } from "../services/api";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
   },
   form: {
-    width: '100%',
+    width: "100%",
     maxWidth: 400,
     padding: theme.spacing(3),
     backgroundColor: theme.palette.background.paper,
@@ -34,13 +34,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const Login = () => {
   const classes = useStyles();
   const navigateTo = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -51,16 +50,20 @@ const Login = () => {
 
       if (status_code === 200) {
         const { role, username, full_name, avatar_url } = detail;
-        localStorage.setItem('user', JSON.stringify({ role, username, full_name, avatar_url }));
-        localStorage.setItem('role', detail.role);
-        navigateTo('/');
+        localStorage.setItem(
+          "user",
+          JSON.stringify({ role, username, full_name, avatar_url })
+        );
+        localStorage.setItem("role", detail.role);
+        navigateTo("/");
       } else {
-        setErrorMessage('Invalid username or password');
+        setErrorMessage("Invalid username or password");
       }
     } catch (error) {
       // Xử lý lỗi khi gọi API login
-      setErrorMessage('Failed to login');
+      setErrorMessage("Failed to login");
     }
+    console.log();
   };
 
   return (
@@ -92,7 +95,13 @@ const Login = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button variant="contained" color="primary" type="submit" fullWidth className={classes.button}>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              fullWidth
+              className={classes.button}
+            >
               Login
             </Button>
           </Grid>
