@@ -145,7 +145,7 @@ const BookDetail = () => {
   return (
     <Box className={classes.root}>
       {book && (
-        <Paper elevation={3} style={{ height: "80vh" }}>
+        <Paper elevation={3} style={{ height: "100vh" }}>
           <Box className={classes.bookDetails}>
             <Box className={classes.bookImage}>
               <img
